@@ -1,25 +1,73 @@
 # Python
 __pycache__/
 *.py[cod]
+*$py.class
 .venv/
 venv/
-.env
+env/
+ENV/
+.Python
+*.egg-info/
+*.egg
+.eggs/
+build/
+
+# Python test, type-checking, and coverage output
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.pytype/
+.tox/
+.nox/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+.ipynb_checkpoints/
 
 # Node
 node_modules/
 dist/
+.next/
+.nuxt/
+.output/
+.svelte-kit/
+.turbo/
+.parcel-cache/
+coverage/
+*.tsbuildinfo
 
 # IDE
 .vscode/
 .idea/
+*.swp
+*.swo
 
 # OS
 .DS_Store
 Thumbs.db
+Desktop.ini
 
-# Docker
+# Runtime logs and local databases
 *.log
+*.pid
+*.sqlite
+*.sqlite3
+*.sqlite-journal
+*.sqlite3-journal
+*.sqlite-wal
+*.sqlite-shm
+*.sqlite3-wal
+*.sqlite3-shm
 
 # Secrets
+.env
 .env.*
 !.env.example
+!.env.template
+*.key
+*.pem
+*.p12
+*.pfx
+id_rsa
+id_ed25519

@@ -1,11 +1,14 @@
 from fastapi import FastAPI
 from sqlalchemy import text
 from app.database import engine
+from app.api.routes.research import router as research_router
 
 app = FastAPI(
     title="Research service",
     version="0.1.0"
 )
+
+app.include_router(research_router)
 
 @app.get("/health")
 async def health():

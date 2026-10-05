@@ -2,13 +2,25 @@ services:
 
 
   redis:
-    image: redis:7-alpine
+    image: redis/redis-stack-server:latest
     container_name: outreach_redis
     restart: unless-stopped
+
     ports:
       - "6379:6379"
+
+    environment:
+      REDIS_ARGS: "--appendonly yes"
+
     volumes:
       - redis_data:/data
+
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -34,7 +46,6 @@ services:
       - qdrant_data:/qdrant/storage
 
 volumes:
-  postgres_data:
   redis_data:
   rabbitmq_data:
   qdrant_data:

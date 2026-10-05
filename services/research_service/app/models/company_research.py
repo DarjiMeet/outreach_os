@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime
 
-from sqlalchemy import DateTime, String, Text, func
+from sqlalchemy import DateTime, String, Text, func, Integer
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -49,4 +49,22 @@ class CompanyResearch(Base):
         nullable=False,
         server_default=func.now(),
         onupdate=func.now(),
+    )
+
+    extracted_text: Mapped[str | None] = mapped_column(
+        Text,
+        nullable=True
+    )
+
+    attempt_count: Mapped[int] = mapped_column(
+        "attempt",
+        Integer,
+        nullable=False,
+        default=0,
+        server_default="0",
+    )
+
+    last_error: Mapped[str | None] = mapped_column(
+        Text,
+        nullable=True
     )

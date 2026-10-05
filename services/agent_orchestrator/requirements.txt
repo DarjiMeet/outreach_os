@@ -1,0 +1,7 @@
+langgraph 
+langchain-core 
+httpx 
+fastapi 
+"uvicorn[standard]" 
+pydantic-settings
+async-timeout
