@@ -96,7 +96,28 @@ Restart discovery and the orchestrator after changing code. Start a **new**
 lead-generation request to use the new discovery flow: resuming a checkpoint that
 already passed discovery does not rerun that node or repair its saved companies.
 
-Offline regressions, from each service directory:
+### Evidence selection
+
+Discovery sends at most **2,000 characters of selected content per search result**
+to its classifier (titles, URLs, instructions, and schema are outside that budget).
+The selector scans all available content, removes navigation, and prioritizes
+business/products, customers, location, headcount, commercial model, technology,
+and business signals, with an extra preference for the user's criteria. It selects
+source excerpts, not an LLM-generated summary; no extra model call is added.
+Headings and table labels stay attached to facts; `[...]` separates excerpts.
+Oversized indivisible rows are skipped rather than truncated into ambiguous facts.
+GTM quotations must occur in both selected and original source text. This verifies
+quotation presence, not whether the model correctly interpreted the claim.
+
+The research service separately preserves HTML titles, descriptions, organization/
+product JSON-LD, headings, table rows, and links before analysis. Each crawled page
+is labelled with its source URL. JSON-LD is treated as a website's claims, not
+independently verified data. The research analyzer retains its existing 30,000-
+character input limit; the discovery 2,000-character cap does not apply to it.
+Selection cannot recover facts absent from the fetched page or guarantee that all
+relevant facts fit in the window.
+
+Run the offline suites from the discovery, research, and orchestrator directories:
 
 ```powershell
 ..\..\.venv\Scripts\python.exe -m unittest discover -s tests -v

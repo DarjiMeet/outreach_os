@@ -1,5 +1,64 @@
 from pydantic import BaseModel, Field, PrivateAttr
+from typing import Literal
 
+
+GTMField = Literal[
+    "business_overview",
+    "products_services",
+    "target_customers",
+    "business_model",
+    "industry",
+    "location",
+    "employee_range",
+    "use_cases",
+    "technologies",
+    "business_signals",
+]
+
+GTM_FIELDS = (
+    "business_overview",
+    "products_services",
+    "target_customers",
+    "business_model",
+    "industry",
+    "location",
+    "employee_range",
+    "use_cases",
+    "technologies",
+    "business_signals",
+)
+
+
+class GTMFact(BaseModel):
+    field: GTMField
+
+    value: str = Field(
+        min_length=1,
+        max_length=350,
+    )
+
+    source_url: str
+
+    # A short, exact excerpt from the supplied search evidence.
+    evidence: str = Field(
+        min_length=12,
+        max_length=300,
+    )
+
+    # For business signals, only populate an explicitly stated date.
+    observed_date: str | None = None
+
+
+class GTMSummary(BaseModel):
+    facts: list[GTMFact] = Field(
+        default_factory=list,
+        max_length=12,
+    )
+
+    unknown_fields: list[GTMField] = Field(
+        default_factory=list,
+        max_length=10,
+    )
 
 class CompanyDiscoveryRequest(BaseModel):
     query: str | None = None
@@ -53,6 +112,10 @@ class ExtractedCompany(BaseModel):
         le=1,
     )
 
+    gtm_summary: GTMSummary = Field(
+        default_factory=GTMSummary
+    )
+
 
 class CompanyExtractionResponse(BaseModel):
     companies: list[ExtractedCompany]
@@ -65,6 +128,10 @@ class CompanyCandidate(BaseModel):
     description: str | None = None
     source: str
     website_source: str | None = None
+    gtm_summary: GTMSummary = Field(
+        default_factory=GTMSummary
+    )
+
 
 
 class DiscoverySummary(BaseModel):
@@ -86,3 +153,5 @@ class CompanyDiscoveryResponse(BaseModel):
 
 class ResearchSubmissionResponse(BaseModel):
     jobs: list[dict]
+
+

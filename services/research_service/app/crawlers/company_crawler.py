@@ -20,7 +20,7 @@ class CompanyCrawler:
         homepage_html = await self.website_client.fetch(start_url)
 
         homepage_text = self.text_extractor.extract(
-            homepage_html
+            homepage_html, source_url=start_url,
         )
 
         useful_links = self._find_useful_links(
@@ -28,7 +28,7 @@ class CompanyCrawler:
             homepage_html,
         )
 
-        pages = [homepage_text]
+        pages = [f"Source: {start_url}\n{homepage_text}"]
         source_urls = [start_url]
 
 
@@ -36,9 +36,9 @@ class CompanyCrawler:
             try:
                 html = await self.website_client.fetch(url)
 
-                text = self.text_extractor.extract(html)
+                text = self.text_extractor.extract(html, source_url=url)
 
-                pages.append(text)
+                pages.append(f"Source: {url}\n{text}")
                 source_urls.append(url)
 
             except Exception:

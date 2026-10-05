@@ -75,6 +75,7 @@ class DiscoveryService:
                         company_name=company.company_name, website=root,
                         location=company.location, description=company.description,
                         source=company.source_url, website_source=company.website_source,
+                        gtm_summary=company.gtm_summary,
                     ))
                     if len(companies) >= criteria.limit:
                         return
@@ -95,8 +96,10 @@ class DiscoveryService:
                     fresh = [result for result in raw_results if result.url not in seen_sources]
                     seen_sources.update(result.url for result in fresh)
                     # Smaller extraction batches preserve evidence while bounding model input.
-                    for offset in range(0, len(fresh), 10):
-                        batch = fresh[offset:offset + 10]
+                    extraction_batch_size = 3
+
+                    for offset in range(0, len(fresh), extraction_batch_size):
+                        batch = fresh[offset:offset + extraction_batch_size]
                         extraction_criteria = criteria.model_copy(update={
                             "limit": min(100, max(10, (criteria.limit - len(companies)) * 3)),
                         })
